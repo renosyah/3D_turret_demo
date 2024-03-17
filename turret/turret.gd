@@ -6,6 +6,8 @@ export var is_limit_arc :bool = false
 export var limit_rotation :float = 45
 export var limit_elevation :float = 15
 
+export var turret_rotation_speed :float = 8
+
 var targets :Array
 
 onready var body = $body
@@ -52,9 +54,8 @@ func _process(delta):
 		spatial.rotation_degrees.y = wrapf(spatial.rotation_degrees.y, 0.0, 360.0)
 		spatial.rotation_degrees.x = clamp(spatial.rotation_degrees.x, -45, 90)
 	
-	
-	body.rotation.y = lerp_angle(body.rotation.y, spatial.rotation.y, 8 * delta)
-	gun.rotation.x = lerp_angle(gun.rotation.x, spatial.rotation.x, 8 * delta)
+	body.rotation.y = lerp_angle(body.rotation.y, spatial.rotation.y, turret_rotation_speed * delta)
+	gun.rotation.x = lerp_angle(gun.rotation.x, spatial.rotation.x, turret_rotation_speed * delta)
 	
 	sprite_3d.translation = turret_aiming_pos
 	
