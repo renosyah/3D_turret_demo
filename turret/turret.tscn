@@ -1,0 +1,77 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://turret/turret.gd" type="Script" id=1]
+[ext_resource path="res://aim.png" type="Texture" id=2]
+[ext_resource path="res://bullet/bullet.tscn" type="PackedScene" id=3]
+
+[sub_resource type="CylinderMesh" id=1]
+top_radius = 0.5
+bottom_radius = 0.5
+
+[sub_resource type="SpatialMaterial" id=2]
+albedo_color = Color( 0.458824, 0.458824, 0.458824, 1 )
+
+[sub_resource type="CubeMesh" id=3]
+size = Vector3( 1, 0.5, 2 )
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[sub_resource type="CylinderMesh" id=5]
+top_radius = 0.06
+bottom_radius = 0.06
+
+[sub_resource type="SpatialMaterial" id=6]
+albedo_color = Color( 0.388235, 0.388235, 0.388235, 1 )
+
+[sub_resource type="CylinderShape" id=7]
+height = 20.2694
+radius = 16.184
+
+[node name="turret" type="Spatial"]
+script = ExtResource( 1 )
+bullet_scene = ExtResource( 3 )
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.29233, 0 )
+billboard = 1
+double_sided = false
+texture = ExtResource( 2 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+skeleton = NodePath("../body")
+material/0 = SubResource( 2 )
+
+[node name="body" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15424, 0 )
+
+[node name="MeshInstance2" type="MeshInstance" parent="body"]
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
+
+[node name="gun" type="Spatial" parent="body"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.771859 )
+
+[node name="MeshInstance3" type="MeshInstance" parent="body/gun"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.856696 )
+mesh = SubResource( 5 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 6 )
+
+[node name="Position3D" type="Position3D" parent="body/gun"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.83732 )
+
+[node name="Area" type="Area" parent="."]
+collision_layer = 0
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape" parent="Area"]
+shape = SubResource( 7 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
+[connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
+[connection signal="body_exited" from="Area" to="." method="_on_Area_body_exited"]

@@ -1,0 +1,79 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://turret/turret.tscn" type="PackedScene" id=1]
+[ext_resource path="res://main.gd" type="Script" id=2]
+[ext_resource path="res://enemy/enemy.tscn" type="PackedScene" id=3]
+[ext_resource path="res://map_env.tres" type="Environment" id=6]
+
+[sub_resource type="PlaneMesh" id=1]
+size = Vector2( 25, 25 )
+
+[sub_resource type="SpatialMaterial" id=2]
+albedo_color = Color( 0, 0.188235, 0.0196078, 1 )
+
+[sub_resource type="Curve3D" id=3]
+_data = {
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, -0.231398, -6.19888e-06, -13.6478, 0, 0, 0, 0, 0, 0, 13.2959, -6.19888e-06, -13.706, 0, 0, 0, 0, 0, 0, 13.1205, -6.19888e-06, -0.00352524 ),
+"tilts": PoolRealArray( 0, 0, 0 )
+}
+
+[sub_resource type="Curve3D" id=4]
+_data = {
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 0.109476, -6.19888e-06, 13.0079, 0, 0, 0, 0, 0, 0, -12.7928, -6.19888e-06, 12.8374, 0, 0, 0, 0, 0, 0, -13.2475, -6.19888e-06, 0.389819 ),
+"tilts": PoolRealArray( 0, 0, 0 )
+}
+
+[node name="Node" type="Node"]
+script = ExtResource( 2 )
+enemy_scene = ExtResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = SubResource( 2 )
+
+[node name="turret" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.42271, 0, -5.91117 )
+
+[node name="turret4" parent="." instance=ExtResource( 1 )]
+transform = Transform( -0.804303, 0.594219, 0, -0.594219, -0.804303, 0, 0, 0, 1, -5.00805, 5.27991, 5.01608 )
+
+[node name="turret3" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, -0.999891, 0.0147474, 0, -0.0147474, -0.999891, 6.82058, 7.58586, -5.74066 )
+
+[node name="turret2" parent="." instance=ExtResource( 1 )]
+transform = Transform( -0.03776, -0.999287, 0, 0.999287, -0.03776, 0, 0, 0, 1, 5.9072, 2.80997, 6.76867 )
+
+[node name="Path" type="Path" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.84222, 0 )
+curve = SubResource( 3 )
+
+[node name="spawn" type="PathFollow" parent="Path"]
+transform = Transform( 0.998276, -1.1057e-10, -0.0586913, 1.10129e-10, 1, -1.07528e-11, 0.0586913, 4.2707e-12, 0.998276, -0.231398, -6.19888e-06, -13.6478 )
+
+[node name="Path2" type="Path" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.84222, 0 )
+curve = SubResource( 4 )
+
+[node name="to" type="PathFollow" parent="Path2"]
+transform = Transform( 0.99512, 1.36507e-11, -0.0986725, -6.7141e-12, 1, 7.06317e-11, 0.0986725, -6.96245e-11, 0.99512, 0.109476, -6.19888e-06, 13.0079 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.7
+one_shot = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource( 6 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
+shadow_enabled = true
+directional_shadow_mode = 0
+
+[node name="Spatial" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.641195, 0.767378, 0, -0.767378, 0.641195, 0, 0, 0 )
+
+[node name="Camera" type="Camera" parent="Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20.7029 )
+current = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
