@@ -1,7 +1,7 @@
 extends KinematicBody
 
 export var move_to :Vector3
-export var speed :float = 7
+export var speed :float = 4
 
 var velocity :Vector3
 

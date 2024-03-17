@@ -7,6 +7,7 @@ export var limit_rotation :float = 45
 export var limit_elevation :float = 15
 
 export var turret_rotation_speed :float = 8
+export var bullet_speed :float = 28
 
 var targets :Array
 
@@ -31,7 +32,6 @@ func _process(delta):
 	if not is_instance_valid(target):
 		return
 		
-	var bullet_speed :float = 15
 	var pos = gun.global_transform.origin
 	var target_pos = target.global_transform.origin
 	var dist_to_target_pos = pos.distance_to(target_pos)
@@ -75,6 +75,7 @@ func _shot_bullet():
 	var b = bullet_scene.instance()
 	b.move_to = gun.global_transform.origin + -gun.global_transform.basis.z * 10
 	b.max_dist = 25
+	b.speed = bullet_speed
 	add_child(b)
 	b.translation = position_3d.global_transform.origin
 	b.launch()
