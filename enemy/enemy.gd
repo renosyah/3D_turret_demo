@@ -1,6 +1,7 @@
 extends KinematicBody
 
 export var move_to :Vector3
+export var speed :float = 7
 
 var velocity :Vector3
 
@@ -13,5 +14,5 @@ func _process(delta):
 		queue_free()
 		return
 		
-	velocity = dir * 3
+	velocity = dir * speed
 	velocity = move_and_slide(velocity)

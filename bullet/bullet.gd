@@ -2,6 +2,7 @@ extends Area
 
 export var move_to :Vector3
 export var max_dist :float = 50
+export var speed :float = 15
 
 var dir :Vector3
 var dist :float
@@ -12,15 +13,8 @@ func _ready():
 	
 func launch():
 	var pos = global_transform.origin
-	dir = pos.direction_to(move_to + _get_added_spread(0.7))
+	dir = pos.direction_to(move_to)
 	set_process(true)
-	
-func _get_added_spread(spread :float) -> Vector3:
-	var v = Vector3.ONE
-	v.x *= rand_range(-spread, spread)
-	v.y *= rand_range(-spread, spread)
-	v.z *= rand_range(-spread, spread)
-	return v
 	
 func _process(delta):
 	if dist > max_dist:
@@ -28,7 +22,7 @@ func _process(delta):
 		queue_free()
 		return
 		
-	var vel = 15 * delta
+	var vel = speed * delta
 	translation += dir * vel
 	dist += vel
 	

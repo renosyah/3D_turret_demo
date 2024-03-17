@@ -58,7 +58,7 @@ curve = SubResource( 4 )
 transform = Transform( 0.99512, 1.36507e-11, -0.0986725, -6.7141e-12, 1, 7.06317e-11, 0.0986725, -6.96245e-11, 0.99512, 0.109476, -6.19888e-06, 13.0079 )
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 0.7
+wait_time = 0.6
 one_shot = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
