@@ -1,8 +1,21 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://turret/turret.gd" type="Script" id=1]
 [ext_resource path="res://aim.png" type="Texture" id=2]
 [ext_resource path="res://bullet/bullet.tscn" type="PackedScene" id=3]
+
+[sub_resource type="SphereMesh" id=8]
+radius = 0.2
+height = 0.2
+radial_segments = 8
+rings = 8
+
+[sub_resource type="SpatialMaterial" id=9]
+flags_unshaded = true
+
+[sub_resource type="SpatialMaterial" id=10]
+flags_unshaded = true
+albedo_color = Color( 1, 0, 0, 1 )
 
 [sub_resource type="CylinderMesh" id=1]
 top_radius = 0.5
@@ -31,6 +44,18 @@ radius = 16.184
 [node name="turret" type="Spatial"]
 script = ExtResource( 1 )
 bullet_scene = ExtResource( 3 )
+
+[node name="no_align" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42775, 0 )
+mesh = SubResource( 8 )
+software_skinning_transform_normals = false
+material/0 = SubResource( 9 )
+
+[node name="align" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42775, 0 )
+mesh = SubResource( 8 )
+software_skinning_transform_normals = false
+material/0 = SubResource( 10 )
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.29233, 0 )

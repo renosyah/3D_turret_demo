@@ -28,4 +28,4 @@ func _process(delta):
 	
 func _on_bullet_body_entered(body):
 	if is_instance_valid(body):
-		body.queue_free()
+		body.kill()

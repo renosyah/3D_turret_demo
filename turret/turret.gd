@@ -8,6 +8,8 @@ export var limit_elevation :float = 15
 
 export var turret_rotation_speed :float = 8
 export var bullet_speed :float = 28
+export var fire_alignment_threshold = 0.80
+export var enable :bool
 
 var targets :Array
 
@@ -16,6 +18,8 @@ onready var gun = $body/gun
 onready var timer = $Timer
 onready var sprite_3d = $Sprite3D
 onready var position_3d = $body/gun/Position3D
+onready var no_align = $no_align
+onready var align = $align
 
 var spatial :Spatial = Spatial.new()
 
@@ -25,7 +29,7 @@ func _ready():
 	sprite_3d.set_as_toplevel(true)
 	
 func _process(delta):
-	if targets.empty():
+	if targets.empty() or not enable:
 		return
 		
 	var target = targets[0]
@@ -39,10 +43,7 @@ func _process(delta):
 	# get position where the target is gonna be
 	var bullet_fly_time :float = dist_to_target_pos / bullet_speed
 	var target_move_pos = target_pos + target.velocity * bullet_fly_time
-	var dist_to_target_move_pos = pos.distance_to(target_move_pos)
-	
-	var turret_aiming_pos = pos + -gun.global_transform.basis.z * dist_to_target_move_pos
-	turret_aiming_pos.y = target_move_pos.y
+	var dir_to_target = pos.direction_to(target_move_pos)
 	
 	spatial.look_at(target_move_pos, Vector3.UP)
 	
@@ -57,11 +58,18 @@ func _process(delta):
 	body.rotation.y = lerp_angle(body.rotation.y, spatial.rotation.y, turret_rotation_speed * delta)
 	gun.rotation.x = lerp_angle(gun.rotation.x, spatial.rotation.x, turret_rotation_speed * delta)
 	
-	sprite_3d.translation = turret_aiming_pos
+	sprite_3d.translation = target_move_pos
 	
 	# check turret aiming at is align 
 	# with target position
-	if not turret_aiming_pos.distance_to(target_move_pos) < 1:
+	var turret_aiming_pos = (-gun.global_transform.basis.z).normalized()
+	var alignment = turret_aiming_pos.dot(dir_to_target)
+	var is_align = alignment > fire_alignment_threshold
+	
+	no_align.visible = not is_align
+	align.visible = is_align
+	
+	if not is_align:
 		return
 		
 	if not timer.is_stopped():
